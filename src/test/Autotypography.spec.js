@@ -1,4 +1,4 @@
-import * as _ from "../index";
+import PetPeeve, { Operations as _ } from "../index";
 
 describe("Autocorrect utilities", () => {
   describe("Capitalize sentences", () => {
@@ -21,6 +21,14 @@ describe("Autocorrect utilities", () => {
     test("It should capitalize after newlines", () => {
       const wrong = "Multiline sentence\n capitalization";
       const correct = "Multiline sentence\n Capitalization";
+
+      expect( _.capitalizeSentences(wrong) )
+        .toEqual(correct);
+    });
+
+    test("It should capitalize after newlines when containing non-word characters", () => {
+      const wrong = "Multiline sentence\n # capitalization";
+      const correct = "Multiline sentence\n # Capitalization";
 
       expect( _.capitalizeSentences(wrong) )
         .toEqual(correct);
@@ -116,14 +124,8 @@ describe("Autocorrect utilities", () => {
 
   describe("Smart dialog markers", () => {
     it("Should convert an hyphen delimited dialog, to double carets", () => {
-      const wrong = `
-        - Question?
-        - Answer!
-      `;
-      const correct = `
-        «Question?»
-        «Answer!»
-      `;
+      const wrong = `- Question?\n- Answer!`;
+      const correct = `«Question?»\n«Answer!»`;
 
       expect( _.smartDialogMarkers(wrong) )
         .toEqual(correct);
@@ -196,11 +198,33 @@ describe("Autocorrect utilities", () => {
     test("It should sanitize a sentence with all the functions in the correct order", () => {
       const wrong = "- sometimes,,typing can be \"hard\"...so--why   not--<<give the user>> some help?? yes"
         + "\n- you're right:we totally should (I think.)";
-      const correct = "«Sometimes, typing can be “hard”… so–why not–«Give the user» some help? Yes.»"
+      const correct = "«Sometimes, typing can be “hard”… so–why not–«give the user» some help? Yes.»"
         + "\n«You're right: we totally should (I think).»";
 
-      expect( _.autocorrect(wrong) )
+      expect( PetPeeve()(wrong) )
         .toEqual(correct);
+    });
+
+    test("It should sanitize a sentence accepting only operations passed by the user", () => {
+      const wrong = "- sometimes,,typing can be \"hard\"...so--why   not--<<give the user>> some help?? yes"
+        + "\n- you're right:we totally should (I think.)";
+      const correct = "- sometimes,typing can be \"hard\".so--why not--<<give the user>> some help? yes"
+      + "\n- you're right:we totally should (I think.)";
+
+      expect( PetPeeve({ removeExtraPunctuation: true, removeExtraSpaces: true })(wrong) )
+        .toEqual(correct);
+    });
+
+    test("It should allow to initialize the function, but then change the options", () => {
+      const corrector = PetPeeve();
+
+      const wrong = "- sometimes,,typing can be \"hard\"...so--why   not--<<give the user>> some help?? yes"
+        + "\n- you're right:we totally should (I think.)";
+      const limitedCorrect = "- Sometimes, typing can be “hard”… so–why not–«give the user» some help? Yes."
+      + "\n- You're right: we totally should (I think).";
+
+      expect( corrector(wrong, { smartDialogMarkers: false }) )
+        .toEqual(limitedCorrect);
     });
   });
 });
