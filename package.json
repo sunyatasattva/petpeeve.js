@@ -1,6 +1,6 @@
 {
   "name": "petpeeve",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0",
   "description": "Petpeeve.js lets you correct the most common typographic errors and automagically normalize your strings according to sane formatting rules.",
   "repository": {
     "type": "git",
