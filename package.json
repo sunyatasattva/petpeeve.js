@@ -10,7 +10,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "test": "jest",
-    "cdn:bundle:.js": "simplifyify dist/index.js -s autotypography -o dist/bundle.js --debug --bundle",
+    "cdn:bundle:.js": "simplifyify dist/index.js -s petpeeve -o dist/bundle.js --debug --bundle",
     "cdn:bundle:.min.js": "terser dist/bundle.js -cmo dist/bundle.min.js",
     "cdn:bundle": "npm run cdn:bundle:.js && npm run cdn:bundle:.min.js",
     "cdn:esm": "tsc -p tsconfig.esm.json",
@@ -34,13 +34,13 @@
   "author": "M. L. Giannotta",
   "license": "MIT",
   "files": [
-    "/dist/*.{d.ts,js,js.map}",
-    "/dist/tools/",
-    "/dist/zz_esm/",
-    "/src/*.ts",
-    "/src/tools/"
+    "/dist"
   ],
-  "keywords": ["typography", "formatting", "autocorrect"],
+  "keywords": [
+    "typography",
+    "formatting",
+    "autocorrect"
+  ],
   "homepage": "https://github.com/sunyatasattva/petpeeve.js",
   "devDependencies": {
     "@babel/core": "^7.11.6",

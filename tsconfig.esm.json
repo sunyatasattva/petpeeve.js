@@ -5,6 +5,6 @@
   ],
   "compilerOptions": {
     "module": "es2015",
-    "outDir": "dist/zz_esm"
+    "outDir": "dist/esm"
   }
 }
